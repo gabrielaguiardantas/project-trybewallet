@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Login from './pages/Login';
+import Wallet from './pages/Wallet';
 
-function App() {
-  return <div>Hello, TrybeWallet!</div>;
+class App extends Component {
+  render() {
+    return (
+      <main>
+        <Switch>
+          <Route exact path="/" component={ Login } />
+          <Route path="/carteira" component={ Wallet } />
+        </Switch>
+      </main>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  user: state.user,
+  wallet: state.wallet,
+});
 
-// showtime
+export default connect(mapStateToProps)(App);
