@@ -11,7 +11,7 @@ class WalletForm extends Component {
     method: 'Dinheiro',
     tag: 'Alimentação',
     exchangeRates: '',
-    id: -1,
+    id: 0,
   };
 
   componentDidMount() {
@@ -25,7 +25,7 @@ class WalletForm extends Component {
   };
 
   handleClick = async () => {
-    const { dispatch } = this.props;
+    const { dispatch, expenseId } = this.props;
     fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((currencies) => {
@@ -33,7 +33,7 @@ class WalletForm extends Component {
         this.setState((prevState) => ({
           ...prevState,
           exchangeRates: currencies,
-          id: prevState.id + 1,
+          id: expenseId,
         }), () => {
           dispatch(addExpense(this.state));
           this.setState((prevState) => ({
@@ -43,12 +43,6 @@ class WalletForm extends Component {
           }));
         });
       });
-    // setTimeout(() => dispatch(addExpense(this.state)), responseTime);
-    // setTimeout(() => this.setState((prevState) => ({
-    //   ...prevState,
-    //   value: '',
-    //   description: '',
-    // })), responseTime);
   };
 
   render() {
@@ -129,10 +123,12 @@ class WalletForm extends Component {
 WalletForm.propTypes = ({
   dispatch: Proptypes.func.isRequired,
   currencies: Proptypes.arrayOf(Proptypes.string.isRequired).isRequired,
+  expenseId: Proptypes.number.isRequired,
 });
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  expenseId: state.wallet.expenses.length,
 });
 
 export default connect(mapStateToProps)(WalletForm);

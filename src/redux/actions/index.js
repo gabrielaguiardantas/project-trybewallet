@@ -4,6 +4,7 @@
 export const ADD_EMAIL = 'ADD_EMAIL';
 export const RECEIVE_CURRENCIES = 'RECEIVE_CURRENCIES';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 // ACTIONS CREATORS
 export const addEmail = (email) => ({
@@ -19,6 +20,11 @@ export const receiveCurrencies = (currencies) => ({
 export const addExpense = (state) => ({
   type: ADD_EXPENSE,
   state,
+});
+
+export const deleteExpenseAc = (expenseId) => ({
+  type: DELETE_EXPENSE,
+  expenseId,
 });
 
 // thunk action creator: deve retornar uma função
