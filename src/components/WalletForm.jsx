@@ -24,9 +24,8 @@ class WalletForm extends Component {
     this.setState({ [name]: value });
   };
 
-  handleClick = () => {
+  handleClick = async () => {
     const { dispatch } = this.props;
-    const responseTime = 5;
     fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((currencies) => {
@@ -35,14 +34,21 @@ class WalletForm extends Component {
           ...prevState,
           exchangeRates: currencies,
           id: prevState.id + 1,
-        }));
+        }), () => {
+          dispatch(addExpense(this.state));
+          this.setState((prevState) => ({
+            ...prevState,
+            value: '',
+            description: '',
+          }));
+        });
       });
-    setTimeout(() => dispatch(addExpense(this.state)), responseTime);
-    setTimeout(() => this.setState((prevState) => ({
-      ...prevState,
-      value: '',
-      description: '',
-    })), responseTime);
+    // setTimeout(() => dispatch(addExpense(this.state)), responseTime);
+    // setTimeout(() => this.setState((prevState) => ({
+    //   ...prevState,
+    //   value: '',
+    //   description: '',
+    // })), responseTime);
   };
 
   render() {

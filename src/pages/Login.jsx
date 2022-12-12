@@ -17,8 +17,8 @@ class Login extends React.Component {
   isValidLogin = () => {
     const { email, password } = this.state;
     const minimumPasswordLength = 6;
-    if (email.includes('@') && email.includes('.com')
-    && password.length >= minimumPasswordLength) return true;
+    return (email.includes('@') && email.includes('.com')
+    && password.length >= minimumPasswordLength);
   };
 
   onClickChange = () => {

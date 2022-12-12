@@ -27,9 +27,3 @@ export function fetchCurrencies() {
     .then((response) => response.json())
     .then((currencies) => dispatch(receiveCurrencies(currencies)));
 }
-
-// export function fetchCurrenciesWithExpense() {
-//   return (dispatch) => fetch('https://economia.awesomeapi.com.br/json/all')
-//     .then((response) => response.json())
-//     .then((currencies) => dispatch(addExpense(state, currencies)));
-// }
