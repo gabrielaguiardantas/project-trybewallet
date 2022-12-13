@@ -56,4 +56,41 @@ describe('some tests in the Login component', () => {
 
     expect(screen.findByText(/5\.24/i));
   });
+  it('has a delete expense button and it works properly', async () => {
+    const { history } = renderWithRouterAndRedux(<App />);
+
+    act(() => {
+      history.push('/carteira');
+    });
+    const valueInputEl = screen.getByRole('spinbutton', {
+      name: /valor:/i,
+    });
+    const addExpenseButtonEl = screen.getByRole('button', {
+      name: /adicionar despesa/i,
+    });
+    userEvent.type(valueInputEl, '1');
+    userEvent.click(addExpenseButtonEl);
+
+    setTimeout(() => {
+      expect(screen.getByRole('button', {
+        name: /excluir/i,
+      })).toBeInTheDocument();
+    }, 0);
+
+    setTimeout(() => {
+      userEvent.click(screen.getByRole('button', {
+        name: /excluir/i,
+      }));
+    }, 0);
+
+    setTimeout(() => {
+      expect(screen.getByRole('button', {
+        name: /excluir/i,
+      })).not.toBeInTheDocument();
+    }, 0);
+
+    // expect(screen.getByRole('button', {
+    //   name: /excluir/i,
+    // })).not.toBeInTheDocument();
+  });
 });
