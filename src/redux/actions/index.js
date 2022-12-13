@@ -42,5 +42,8 @@ export const completeEditExpenseAc = (expense) => ({
 export function fetchCurrencies() {
   return (dispatch) => fetch('https://economia.awesomeapi.com.br/json/all')
     .then((response) => response.json())
-    .then((currencies) => dispatch(receiveCurrencies(currencies)));
+    .then((currencies) => {
+      delete currencies.USDT;
+      dispatch(receiveCurrencies(currencies));
+    });
 }

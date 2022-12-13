@@ -13,7 +13,7 @@ class WalletForm extends Component {
     method: 'Dinheiro',
     tag: alimentacao,
     exchangeRates: '',
-    id: 0,
+    id: -1,
   };
 
   componentDidMount() {
@@ -24,10 +24,20 @@ class WalletForm extends Component {
   componentDidUpdate(prevProps) {
     const { expenses, idToEdit, editor } = this.props;
     if (editor !== prevProps.editor) {
-      console.log('re-renderizou po');
-      this.setState({
-        ...expenses[idToEdit],
-      });
+      const expenseToEdit = expenses.find((expense) => expense.id === idToEdit);
+      this.setState((prevState) => ({
+        ...expenseToEdit,
+        id: prevState.id,
+      }));
+      if (editor === false) {
+        this.setState({
+          value: '',
+          description: '',
+          method: 'Dinheiro',
+          tag: alimentacao,
+          currency: 'USD',
+        });
+      }
     }
   }
 
@@ -37,29 +47,21 @@ class WalletForm extends Component {
   };
 
   handleClick = async () => {
-    const { dispatch, expenseId, editor } = this.props;
+    const { dispatch, expenseId, editor, idToEdit } = this.props;
     fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((currencies) => {
         delete currencies.USDT;
-        this.setState((prevState) => ({
-          ...prevState,
+        this.setState({
           exchangeRates: currencies,
-          id: expenseId,
-        }), () => {
+        }, () => {
           if (editor) {
             dispatch(completeEditExpenseAc(this.state));
-            this.setState((prevState) => ({
-              ...prevState,
-              value: '',
-              description: '',
-              method: 'Dinheiro',
-              tag: alimentacao,
-            }));
           } else {
-            dispatch(addExpense(this.state));
+            const { id } = this.state;
+            dispatch(addExpense({ ...this.state, id: id + 1 }));
             this.setState((prevState) => ({
-              ...prevState,
+              id: prevState.id + 1,
               value: '',
               description: '',
               currency: 'USD',

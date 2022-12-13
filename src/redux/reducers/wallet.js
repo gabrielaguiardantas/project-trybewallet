@@ -13,18 +13,16 @@ const INITIAL_STATE = {
 const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case RECEIVE_CURRENCIES: {
-    const currenciesList = [...Object.keys(action.currencies)];
-    currenciesList.splice(1, 1);
     return {
       ...state,
-      currencies: currenciesList,
+      currencies: [...Object.keys(action.currencies)],
     };
   }
   case ADD_EXPENSE: {
     return {
       ...state,
       expenses: [...state.expenses, action.state],
-      idToEdit: action.state.id,
+      // idToEdit: action.state.id,
     };
   }
   case DELETE_EXPENSE: {
@@ -43,14 +41,19 @@ const wallet = (state = INITIAL_STATE, action) => {
     };
   }
   case COMPLETE_EDIT_EXPENSE: {
-    const expenseToEdit = state.expenses
-      .find((expense) => expense.id === action.expense.id);
+    // const expenseToEdit = state.expenses
+    //   .find((expense) => expense.id === action.expense.id);
     const expensesList = [...state.expenses];
-    expensesList.splice(expensesList.indexOf(expenseToEdit), 1, action.expense);
+    // expensesList.splice(expensesList.indexOf(expenseToEdit), 1, action.expense);
+    const expensesListUpdated = expensesList.map((expense) => {
+      if (expense.id === state.idToEdit) {
+        return { ...action.expense, id: expense.id };
+      } return expense;
+    });
     return {
       ...state,
       editor: false,
-      expenses: expensesList,
+      expenses: expensesListUpdated,
     };
   }
   default:
