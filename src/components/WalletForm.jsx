@@ -47,7 +47,7 @@ class WalletForm extends Component {
   };
 
   handleClick = async () => {
-    const { dispatch, expenseId, editor, idToEdit } = this.props;
+    const { dispatch, editor } = this.props;
     fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((currencies) => {
