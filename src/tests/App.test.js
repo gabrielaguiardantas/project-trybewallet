@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
@@ -39,11 +39,8 @@ describe('some tests in the Login component', () => {
     expect(pathname).toBe('/carteira');
   });
   it('has a correct totalValue on the screen when we add a expense', () => {
-    const { history } = renderWithRouterAndRedux(<App />);
-
-    act(() => {
-      history.push('/carteira');
-    });
+    const initialEntries = ['/carteira'];
+    renderWithRouterAndRedux(<App />, { initialEntries });
 
     const valueInputEl = screen.getByRole('spinbutton', {
       name: /valor:/i,
@@ -57,11 +54,9 @@ describe('some tests in the Login component', () => {
     expect(screen.findByText(/5\.24/i));
   });
   it('has a delete expense button and it works properly', async () => {
-    const { history } = renderWithRouterAndRedux(<App />);
+    const initialEntries = ['/carteira'];
+    const { store } = renderWithRouterAndRedux(<App />, { initialEntries });
 
-    act(() => {
-      history.push('/carteira');
-    });
     const valueInputEl = screen.getByRole('spinbutton', {
       name: /valor:/i,
     });
@@ -71,26 +66,55 @@ describe('some tests in the Login component', () => {
     userEvent.type(valueInputEl, '1');
     userEvent.click(addExpenseButtonEl);
 
-    setTimeout(() => {
+    await waitFor(() => {
       expect(screen.getByRole('button', {
         name: /excluir/i,
       })).toBeInTheDocument();
-    }, 0);
+    });
 
-    setTimeout(() => {
-      userEvent.click(screen.getByRole('button', {
-        name: /excluir/i,
-      }));
-    }, 0);
+    userEvent.click(screen.getByRole('button', {
+      name: /excluir/i,
+    }));
 
-    setTimeout(() => {
+    expect(screen.queryByRole('button', {
+      name: /excluir/i,
+    })).not.toBeInTheDocument();
+    expect(store.getState().wallet.expenses).toStrictEqual([]);
+  });
+  it('has a edit expense button and it works properly', async () => {
+    const initialEntries = ['/carteira'];
+    renderWithRouterAndRedux(<App />, { initialEntries });
+
+    const valueInputEl = screen.getByRole('spinbutton', {
+      name: /valor:/i,
+    });
+    const addExpenseButtonEl = screen.getByRole('button', {
+      name: /adicionar despesa/i,
+    });
+    userEvent.type(valueInputEl, '1');
+    userEvent.click(addExpenseButtonEl);
+
+    await waitFor(() => {
       expect(screen.getByRole('button', {
-        name: /excluir/i,
-      })).not.toBeInTheDocument();
-    }, 0);
-
-    // expect(screen.getByRole('button', {
-    //   name: /excluir/i,
-    // })).not.toBeInTheDocument();
+        name: /editar/i,
+      })).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByRole('button', {
+      name: /editar/i,
+    }));
+    expect(screen.getByRole('spinbutton', {
+      name: /valor:/i,
+    })).toHaveAttribute('value', '1');
+    userEvent.type(screen.getByRole('spinbutton', {
+      name: /valor:/i,
+    }), '2');
+    userEvent.click(screen.getByRole('button', {
+      name: /editar despesa/i,
+    }));
+    await waitFor(() => {
+      expect(screen.getByRole('cell', {
+        name: /12\.00/i,
+      })).toBeInTheDocument();
+    });
   });
 });
