@@ -1,10 +1,12 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# Projeto Trybewallet #
+
+Décimo terceiro projeto do curso de desenvolvimento Web da Trybe e sétimo projeto do módulo de FrontEnd. Essa aplicação tem como funcionalidade a gestão de despesas pessoais. Conhecimentos principais desenvolvidos e aperfeiçoados nesse projeto:
+
+- React
+- Redux
+- Testes em RTL
+- Testes assíncronos
+- Requisições a APIs
+
+## Demonstração: ##
+
