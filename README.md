@@ -12,3 +12,5 @@ Décimo terceiro projeto do curso de desenvolvimento Web da Trybe e sétimo proj
 
 https://user-images.githubusercontent.com/110852595/236932639-2c0cd4cf-f2eb-4006-b4ba-d2c0a7c26fb0.mp4
 
+## Features implementadas: ##
+
